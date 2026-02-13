@@ -3,57 +3,91 @@ document.addEventListener('DOMContentLoaded', () => {
     const noBtn = document.getElementById('no-btn');
     const proposalView = document.getElementById('proposal-view');
     const successView = document.getElementById('success-view');
-    const roseContainer = document.getElementById('rose-container');
 
-    // "No" Button Dodging Logic
-    const moveNoButton = () => {
-        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    let noClickCount = 0;
+    const noPhrases = [
+        "No",
+        "Are you sure?",
+        "Really sure?",
+        "Think again!",
+        "Last chance!",
+        "Surely not?",
+        "You might regret this!",
+        "Give it another thought!",
+        "Are you absolutely sure?",
+        "This could be a mistake!",
+        "Have a heart! 🥺",
+        "Don't be so cold!",
+        "Change of heart?",
+        "Wouldn't you reconsider?",
+        "Is that your final answer?",
+        "You're breaking my heart ;(",
+        "Wait... think about it!",
+        "Okay, fine... last chance!",
+        "Just kidding, you can't say no! 😉"
+    ];
 
-        noBtn.style.position = 'fixed';
-        noBtn.style.left = `${x}px`;
-        noBtn.style.top = `${y}px`;
-        noBtn.style.zIndex = '9999';
+    // "No" Button Interaction Logic (Persistent Proposal)
+    const handleNoInteraction = () => {
+        noClickCount++;
+
+        // Change "No" button text
+        if (noClickCount < noPhrases.length) {
+            noBtn.innerText = noPhrases[noClickCount];
+        } else {
+            // Eventually turn it into a Yes button
+            noBtn.innerText = "YES";
+            noBtn.classList.remove('btn-no');
+            noBtn.classList.add('btn-yes');
+            noBtn.removeEventListener('click', handleNoInteraction);
+            noBtn.addEventListener('click', handleYesInteraction);
+        }
+
+        // Scale up the "Yes" button
+        const currentScale = 1 + (noClickCount * 0.2);
+        yesBtn.style.transform = `scale(${currentScale})`;
+
+        // Move the "No" button slightly so it doesn't get covered
+        noBtn.style.marginLeft = `${noClickCount * 10}px`;
     };
 
-    noBtn.addEventListener('mouseover', moveNoButton);
+    noBtn.addEventListener('click', handleNoInteraction);
     noBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        moveNoButton();
+        handleNoInteraction();
     });
-    noBtn.addEventListener('click', moveNoButton);
 
     // "Yes" Button Logic
-    yesBtn.addEventListener('click', () => {
+    const handleYesInteraction = () => {
         proposalView.classList.add('hidden');
         successView.classList.remove('hidden');
 
-        // Let's hide the proposal view completely after transition
         setTimeout(() => {
             proposalView.style.display = 'none';
         }, 500);
 
         createRoses();
         startConfetti();
-    });
+    };
+
+    yesBtn.addEventListener('click', handleYesInteraction);
 
     // Function to create many roses
     function createRoses() {
         const roseIcons = ['🌹', '🌷', '🌸', '🌺', '💐'];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 150; i++) {
             setTimeout(() => {
                 const rose = document.createElement('div');
                 rose.className = 'rose';
                 rose.innerText = roseIcons[Math.floor(Math.random() * roseIcons.length)];
 
-                // Randomize position within the success view
                 rose.style.position = 'absolute';
-                rose.style.left = Math.random() * 90 + '%';
-                rose.style.top = Math.random() * 90 + '%';
+                rose.style.left = Math.random() * 95 + '%';
+                rose.style.top = Math.random() * 95 + '%';
                 rose.style.zIndex = Math.floor(Math.random() * 10).toString();
 
                 successView.appendChild(rose);
-            }, i * 20);
+            }, i * 15);
         }
     }
 
@@ -78,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Simple confetti effect
     function startConfetti() {
         const colors = ['#ff4d6d', '#ffb3c1', '#c9184a', '#ffb703', '#fff'];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 150; i++) {
             const confetti = document.createElement('div');
             confetti.style.position = 'fixed';
             confetti.style.width = '10px';
