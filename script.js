@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const moveNoButton = () => {
         const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
         const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-        
+
         noBtn.style.position = 'fixed';
         noBtn.style.left = `${x}px`;
         noBtn.style.top = `${y}px`;
@@ -17,13 +17,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     noBtn.addEventListener('mouseover', moveNoButton);
-    noBtn.addEventListener('click', moveNoButton); // Extra precaution
+    noBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        moveNoButton();
+    });
+    noBtn.addEventListener('click', moveNoButton);
 
     // "Yes" Button Logic
     yesBtn.addEventListener('click', () => {
         proposalView.classList.add('hidden');
         successView.classList.remove('hidden');
-        
+
         // Let's hide the proposal view completely after transition
         setTimeout(() => {
             proposalView.style.display = 'none';
@@ -36,13 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to create many roses
     function createRoses() {
         const roseIcons = ['🌹', '🌷', '🌸', '🌺', '💐'];
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 100; i++) {
             setTimeout(() => {
                 const rose = document.createElement('div');
                 rose.className = 'rose';
                 rose.innerText = roseIcons[Math.floor(Math.random() * roseIcons.length)];
-                roseContainer.appendChild(rose);
-            }, i * 50);
+
+                // Randomize position within the success view
+                rose.style.position = 'absolute';
+                rose.style.left = Math.random() * 90 + '%';
+                rose.style.top = Math.random() * 90 + '%';
+                rose.style.zIndex = Math.floor(Math.random() * 10).toString();
+
+                successView.appendChild(rose);
+            }, i * 20);
         }
     }
 
@@ -54,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
         heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        
+
         document.body.appendChild(heart);
 
         setTimeout(() => {
@@ -78,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             confetti.style.zIndex = '1000';
             confetti.style.borderRadius = '50%';
             confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
-            
+
             document.body.appendChild(confetti);
 
             setTimeout(() => confetti.remove(), 5000);
