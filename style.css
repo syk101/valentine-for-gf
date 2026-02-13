@@ -125,27 +125,37 @@ body {
     line-height: 1.8;
     margin-bottom: 30px;
     opacity: 0.9;
-    max-height: 400px;
-    overflow-y: auto;
     padding: 0 15px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-red) transparent;
     animation: fadeInPoem 2s ease-in forwards;
 }
 
-.poem-text::-webkit-scrollbar {
-    width: 6px;
+#success-view {
+    position: relative;
+    padding: 60px 15px;
+    /* More padding for mobile */
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: visible;
+    /* Ensure content is visible */
 }
 
-.poem-text::-webkit-scrollbar-thumb {
-    background: var(--primary-red);
-    border-radius: 10px;
+body {
+    overflow-y: auto !important;
+    /* Force allow scrolling */
+    height: auto !important;
+    /* Allow body to expand */
+    min-height: 100vh;
 }
 
 .success-card {
     max-width: 600px;
-    width: 90%;
-    margin: 20px auto;
+    width: 95%;
+    margin: 0 auto 60px auto;
+    flex-shrink: 0;
+    /* Prevent shrinking */
 }
 
 @keyframes fadeInPoem {
